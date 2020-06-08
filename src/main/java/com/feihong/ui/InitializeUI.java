@@ -26,7 +26,8 @@ public class InitializeUI {
     private PasswordField passA;
     private PasswordField passB;
     private CheckBox check;
-    private Tooltip tooltip;
+    private Tooltip tooltip1;
+    private Tooltip tooptip2;
     private Tooltip errortip;
     private String communicationKey;
     private String encryptKey;
@@ -38,9 +39,9 @@ public class InitializeUI {
     }
 
     public void initializeStageA(){
-        tooltip = new Tooltip("客户端管理程序会使用您输入的密码的哈希值作为客户端管理程序和 JSP shell 之间通信的加密密钥, 以确保您和您的 JSP shell 之间通信的私密性");
-        tooltip.setPrefWidth(250);
-        tooltip.setWrapText(true);
+        tooltip1 = new Tooltip("客户端管理程序会将您输入的密码和当前时间戳组合，将得到的字符串的哈希值作为客户端管理程序和 JSP shell 之间通信的加密密钥, 以确保您和您的 JSP shell 之间通信的私密性");
+        tooltip1.setPrefWidth(250);
+        tooltip1.setWrapText(true);
 
         errortip = new Tooltip("密码不能为空");
 
@@ -58,7 +59,7 @@ public class InitializeUI {
                 errortip.hide();
                 if(newValue){
                     Point2D p = passA.localToScene(0.0, 0.0);
-                    tooltip.show(passA,
+                    tooltip1.show(passA,
                             p.getX() + passA.getScene().getX() + passA.getScene().getWindow().getX() + passA.getWidth() + 2,
                             p.getY() + passA.getScene().getY() + passA.getScene().getWindow().getY());
                 }
@@ -68,11 +69,11 @@ public class InitializeUI {
         passA.textProperty().addListener((observable, oldValue, newValue) -> {
             if(passA.getText() == null || passA.getText().trim().equals("")){
                 Point2D p = passA.localToScene(0.0, 0.0);
-                tooltip.show(passA,
+                tooltip1.show(passA,
                         p.getX() + passA.getScene().getX() + passA.getScene().getWindow().getX() + passA.getWidth() + 2,
                         p.getY() + passA.getScene().getY() + passA.getScene().getWindow().getY());
             }else{
-                tooltip.hide();
+                tooltip1.hide();
             }
         });
 
@@ -97,7 +98,7 @@ public class InitializeUI {
                             p.getY() + next.getScene().getY() + next.getScene().getWindow().getY() + next.getHeight());
                 }else{
                     communicationKey = passA.getText().trim();
-                    tooltip.hide();
+                    tooltip1.hide();
                     errortip.hide();
                     stageA.close();
                     stageB.show();
@@ -116,9 +117,9 @@ public class InitializeUI {
 
     public void initializeStageB(){
 
-        tooltip = new Tooltip("若设置了登录密码，每当您打开客户端管理程序时，必须正确输入此密码。若勾选不使用登录密码，则登录时无需输入密码。");
-        tooltip.setPrefWidth(250);
-        tooltip.setWrapText(true);
+        tooptip2 = new Tooltip("若设置了登录密码，每当您打开客户端管理程序时，必须正确输入此密码。若勾选不使用登录密码，则登录时无需输入密码。");
+        tooptip2.setPrefWidth(250);
+        tooptip2.setWrapText(true);
 
         errortip = new Tooltip("登录密码不能为空");
 
@@ -139,7 +140,7 @@ public class InitializeUI {
                 errortip.hide();
                 if(newValue){
                     Point2D p = passB.localToScene(0.0, 0.0);
-                    tooltip.show(passB,
+                    tooptip2.show(passB,
                             p.getX() + passB.getScene().getX() + passB.getScene().getWindow().getX() + passB.getWidth() + 2,
                             p.getY() + passB.getScene().getY() + passB.getScene().getWindow().getY());
                 }
@@ -151,11 +152,11 @@ public class InitializeUI {
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 if(passB.getText() == null || passB.getText().trim().equals("")){
                     Point2D p = passB.localToScene(0.0, 0.0);
-                    tooltip.show(passB,
+                    tooptip2.show(passB,
                             p.getX() + passB.getScene().getX() + passB.getScene().getWindow().getX() + passB.getWidth() + 2,
                             p.getY() + passB.getScene().getY() + passB.getScene().getWindow().getY());
                 }else{
-                    tooltip.hide();
+                    tooptip2.hide();
                 }
             }
         });
@@ -171,7 +172,7 @@ public class InitializeUI {
             @Override
             public void handle(ActionEvent event) {
                 errortip.hide();
-                tooltip.hide();
+                tooptip2.hide();
                 if(check.isSelected()){
                     passB.setEditable(false);
                     passB.setStyle("-fx-control-inner-background: gray;");
@@ -196,7 +197,7 @@ public class InitializeUI {
             @Override
             public void handle(ActionEvent event) {
                 encryptKey = passB.getText().trim();
-                tooltip.hide();
+                tooptip2.hide();
                 errortip.hide();
                 stageB.close();
                 stageA.show();
