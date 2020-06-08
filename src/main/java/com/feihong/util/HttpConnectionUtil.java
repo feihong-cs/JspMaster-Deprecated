@@ -9,14 +9,22 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.conn.ssl.TrustStrategy;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.util.EntityUtils;
+import javax.net.ssl.SSLContext;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +40,7 @@ public class HttpConnectionUtil {
         CommandExecutionResult commandExecutionResult = new CommandExecutionResult();
 
         // 获得Http客户端(可以理解为:你得先有一个浏览器;注意:实际上HttpClient与浏览器是不一样的)
-        CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+        CloseableHttpClient httpClient = createSSLClientDefault();
 
         URIBuilder uriBuilder = null;
         // 响应模型
@@ -43,9 +51,10 @@ public class HttpConnectionUtil {
             uriBuilder = new URIBuilder(url);
             if(params != null) {
                 List<NameValuePair> list = new ArrayList<NameValuePair>();
+                BasicNameValuePair param1;
                 for(Map.Entry<String,String> entry : params.entrySet()){
                     // 将参数放入键值对类NameValuePair中,再放入集合中
-                    BasicNameValuePair param1 = new BasicNameValuePair(entry.getKey(), entry.getValue());
+                    param1 = new BasicNameValuePair(entry.getKey(), entry.getValue());
                     list.add(param1);
                 }
                 uriBuilder.setParameters(list);
@@ -60,7 +69,6 @@ public class HttpConnectionUtil {
                     httpGet.setHeader(entry.getKey(), entry.getValue());
                 }
             }
-
 
             // 配置信息
             RequestConfig requestConfig = RequestConfig.custom()
@@ -94,12 +102,8 @@ public class HttpConnectionUtil {
         } finally {
             try {
                 // 释放资源
-                if (httpClient != null) {
-                    httpClient.close();
-                }
-                if (response != null) {
-                    response.close();
-                }
+                if (httpClient != null) httpClient.close();
+                if (response != null) response.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -114,7 +118,7 @@ public class HttpConnectionUtil {
 
     public static CommandExecutionResult post(String url, Map<String,String> params, Map<String, String> headers){
         // 获得Http客户端(可以理解为:你得先有一个浏览器;注意:实际上HttpClient与浏览器是不一样的)
-        CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+        CloseableHttpClient httpClient = createSSLClientDefault();
         // 存储结果
         CommandExecutionResult commandExecutionResult = new CommandExecutionResult();
 
@@ -135,8 +139,9 @@ public class HttpConnectionUtil {
             // 设置请求参数
             if(params != null){
                 List<NameValuePair> list = new ArrayList<NameValuePair>();
+                BasicNameValuePair param1;
                 for(Map.Entry<String, String> entry : params.entrySet()){
-                    BasicNameValuePair param1 = new BasicNameValuePair(entry.getKey(),entry.getValue());
+                    param1 = new BasicNameValuePair(entry.getKey(),entry.getValue());
                     list.add(param1);
                 }
 
@@ -175,12 +180,9 @@ public class HttpConnectionUtil {
         }finally {
             try {
                 // 释放资源
-                if (httpClient != null) {
-                    httpClient.close();
-                }
-                if (response != null) {
-                    response.close();
-                }
+                if (httpClient != null) httpClient.close();
+                if (response != null) response.close();
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -199,7 +201,7 @@ public class HttpConnectionUtil {
 
     public static CommandExecutionResult post(String url, String postBody, Map<String, String> headers){
         // 获得Http客户端(可以理解为:你得先有一个浏览器;注意:实际上HttpClient与浏览器是不一样的)
-        CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+        CloseableHttpClient httpClient = createSSLClientDefault();
         // 存储结果
         CommandExecutionResult commandExecutionResult = new CommandExecutionResult();
 
@@ -244,8 +246,7 @@ public class HttpConnectionUtil {
             commandExecutionResult.setResponseStatusCode(response.getStatusLine().getStatusCode());
 
             if (responseEntity != null) {
-                String s = EntityUtils.toString(responseEntity).trim();
-                commandExecutionResult.setResponseResult(s);
+                commandExecutionResult.setResponseResult(EntityUtils.toString(responseEntity).trim());
             }
         } catch (ConnectException | SocketTimeoutException e) {
             commandExecutionResult.setException(e.toString());
@@ -254,17 +255,38 @@ public class HttpConnectionUtil {
         }finally {
             try {
                 // 释放资源
-                if (httpClient != null) {
-                    httpClient.close();
-                }
-                if (response != null) {
-                    response.close();
-                }
+                if (httpClient != null) httpClient.close();
+                if (response != null) response.close();
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
 
         return commandExecutionResult;
+    }
+
+    //https://blog.csdn.net/du771278794/java/article/details/83008867
+    public static CloseableHttpClient createSSLClientDefault() {
+
+        SSLContext sslContext;
+        try {
+            sslContext = new SSLContextBuilder().loadTrustMaterial(null, new TrustStrategy() {
+                //信任所有
+                @Override
+                public boolean isTrusted(X509Certificate[] xcs, String string){
+                    return true;
+                }
+            }).build();
+
+            SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslContext);
+
+            return HttpClients.custom().setSSLSocketFactory(sslsf).build();
+
+        } catch (KeyStoreException | NoSuchAlgorithmException | KeyManagementException e) {
+            e.printStackTrace();
+        }
+
+        return HttpClients.createDefault();
     }
 }
