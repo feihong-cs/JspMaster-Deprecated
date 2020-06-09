@@ -27,8 +27,8 @@
     }
 	br.close();
 
-    String key = request.getParameter("key");
-    String iv = request.getParameter("iv");
+    String key = "[key_placeholder]";
+    String iv = "[iv_placeholder]";
 	
     if(postBody != null && !postBody.trim().equals("")){
         postBody = postBody.substring(0, postBody.length()-1);
