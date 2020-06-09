@@ -1,6 +1,6 @@
 package com.feihong.util;
 
-import java.net.URI;
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -14,8 +14,12 @@ public class MyClassLoader extends ClassLoader{
             clazz = Class.forName(name);
         } catch (ClassNotFoundException e) {
             try {
-                String mypath = System.getProperty("user.dir") + "/plugins/" + name.substring(name.lastIndexOf(".")) + ".class";
-                Path path  = Paths.get(new URI(mypath));
+                String mypath = System.getProperty("user.dir") + "/plugin/" + name + ".class";
+                if(!new File(mypath).exists()){
+                    mypath = System.getProperty("user.dir") + "/plugin/" + name.substring(name.lastIndexOf(".") + 1) + ".class";
+                }
+
+                Path path  = Paths.get(mypath);
                 byte[] cLassBytes = Files.readAllBytes(path);
                 clazz = defineClass(name, cLassBytes, 0, cLassBytes.length);
             } catch (Exception e2) {

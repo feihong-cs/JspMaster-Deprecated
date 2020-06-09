@@ -1,7 +1,6 @@
 package com.feihong.executor;
 
 import com.feihong.bean.CommandExecutionResult;
-
 import java.io.IOException;
 
 public interface CommandExecutor {
