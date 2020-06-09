@@ -6,6 +6,7 @@ import javafx.concurrent.Task;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Iterator;
 import java.util.List;
 
@@ -38,7 +39,7 @@ public class LinuxPlatformUploadTask extends Task<Boolean> {
         }
         in.close();
 
-        byte[] bytes = org.apache.commons.codec.binary.Base64.encodeBase64(baos.toByteArray());
+        byte[] bytes = Base64.getDecoder().decode(baos.toByteArray());
         baos.close();
         StringBuffer sb = new StringBuffer(new String(bytes));
         int length = sb.length();
