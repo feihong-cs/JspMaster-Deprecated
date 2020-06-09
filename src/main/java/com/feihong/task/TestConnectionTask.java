@@ -5,8 +5,6 @@ import com.feihong.util.BasicSetting;
 import com.feihong.util.ConnectionUtil;
 import javafx.concurrent.Task;
 
-import java.io.IOException;
-
 public class TestConnectionTask extends Task<Integer> {
     private String result;
     private ShellEntry entry;
@@ -28,18 +26,9 @@ public class TestConnectionTask extends Task<Integer> {
     @Override
     protected Integer call() {
         BasicSetting.getInstance().initialize(entry);
-        String connecionStatus = null;
-        try {
-            connecionStatus = ConnectionUtil.getConnectionStatus();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        }
-        this.status = 1;
+        String connecionStatus = ConnectionUtil.getConnectionStatus();
         this.result = connecionStatus;
+        this.status = 1;
 
         return 1;
     }

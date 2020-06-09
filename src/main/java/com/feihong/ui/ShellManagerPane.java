@@ -174,7 +174,7 @@ public class ShellManagerPane {
                     openTask.valueProperty().addListener((observable, oldValue, newValue) -> {
                         if(openTask.getStatus() == 1){
                             Stage newStage = new Stage();
-                            newStage.setTitle("JspMaster v1.0      Written  by 飞鸿");
+                            newStage.setTitle("JspMaster v1.01      Written  by 飞鸿");
                             newStage.setScene(new Scene(mainUI.getPane(), 1000, 600));
                             newStage.show();
 
@@ -200,6 +200,7 @@ public class ShellManagerPane {
                             if(result.trim().equals("")){
                                 result = "Something is wrong";
                             }
+                            System.out.println("Info: openTask.getStatus() == -1");
                             PromptMessageUI.getAlert("连接失败", result);
                         }
                     });

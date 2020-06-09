@@ -14,10 +14,8 @@ public class CheckLoginPassword extends Task<Integer> {
     }
 
     @Override
-    protected Integer call() throws Exception {
+    protected Integer call(){
         try{
-            String name = BasicSetting.getInstance().dbFile;
-            String pass = PasswordUtil.password;
             //打开时解密 sqlite 数据库文件
             EncryptUtil.decryptFile(BasicSetting.getInstance().dbFile, PasswordUtil.password);
             //调用这个方法主要是看会不会抛出异常。如果正常执行未抛出异常，说明解密成功，否则说明密码错误，解密失败

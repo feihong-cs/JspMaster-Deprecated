@@ -26,19 +26,23 @@ public class OpenMainUITask extends Task<Integer> {
     }
 
     @Override
-    protected Integer call() throws Exception {
+    protected Integer call() {
         try{
             BasicSetting.getInstance().initialize(entry);
-            String key = BasicSetting.getInstance().encryptKey;
-            String iv = BasicSetting.getInstance().iv;
             this.result = ConnectionUtil.getConnectionStatus();
+            System.out.println("Info: ConnectionUtil.getConnectionStatus(): " + this.result);
             if(result.equals("连接成功!")){
+                System.out.println("Info: match");
                 mainUI.initialize(result);
                 this.status = 1;
             }else{
+                System.out.println("Info: not match");
                 this.status = -1;
             }
         }catch(Exception e){
+            //尝试解决 Issues1，怀疑是哪里抛出了异常，导致的bug
+            System.out.println("Info: Exception occured");
+            e.printStackTrace();
             this.status = -1;
         }
 

@@ -44,7 +44,6 @@ public class InitializeTask extends Task<Boolean> {
             ConfigUtil.setCommnunicationKey(key);
             ConfigUtil.setIV(iv);
 
-//            String path = getClass().getResource("/shell").getPath();
             String path = System.getProperty("user.dir") + "/shell";
             File file = new File(path);
             List<File> files = new ArrayList<>();

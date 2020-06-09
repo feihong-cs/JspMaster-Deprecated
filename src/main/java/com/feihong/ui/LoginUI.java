@@ -80,7 +80,7 @@ public class LoginUI {
                         }else if(task.getStatus() == 1){
                             Stage newStage = new Stage();
                             BorderPane borderPane = new ShellManagerPane().getPane();
-                            newStage.setTitle("JspMaster v1.0     Written  by 飞鸿");
+                            newStage.setTitle("JspMaster v1.01     Written  by 飞鸿");
                             newStage.setScene(new Scene(borderPane, 1150, 500));
                             currentStage.close();
                             newStage.show();

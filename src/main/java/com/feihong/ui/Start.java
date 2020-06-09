@@ -25,7 +25,7 @@ public class Start extends Application {
                 primaryStage.show();
             }else{
                 BorderPane borderPane = new ShellManagerPane().getPane();
-                primaryStage.setTitle("JspMaster v1.0     Written  by 飞鸿");
+                primaryStage.setTitle("JspMaster v1.01     Written  by 飞鸿");
                 primaryStage.setScene(new Scene(borderPane, 1150, 500));
                 primaryStage.show();
             }

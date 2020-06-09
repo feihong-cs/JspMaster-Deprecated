@@ -22,7 +22,7 @@ public class BasicSetting {
     private static BasicSetting basicSetting = new BasicSetting();
 
     private BasicSetting(){
-//        dbFile = this.getClass().getResource("/").getPath() + "database/data.db";
+
         dbFile = System.getProperty("user.dir") + "/database/data.db";
         encryptKey = ConfigUtil.getCommunicationKey();
         shells = new HashMap<>();
@@ -79,7 +79,6 @@ public class BasicSetting {
         if(entry.getIV() != null && !entry.getIV().trim().equals("")){
             basicSetting.iv = entry.getIV();
         }else{
-            String iv = ConfigUtil.getIV();
             basicSetting.iv = ConfigUtil.getIV();
         }
     }
