@@ -5,7 +5,6 @@
 <%@ page import="javax.crypto.spec.SecretKeySpec" %>
 <%@ page import="java.security.spec.AlgorithmParameterSpec" %>
 <%@ page import="javax.crypto.spec.IvParameterSpec" %>
-<%@ page import="java.util.Base64" %>
 <%@ page import="javax.crypto.Cipher" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%!
@@ -28,7 +27,7 @@
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
             cipher.init(Cipher.ENCRYPT_MODE, key, iv);
             byte[] result = cipher.doFinal(plaintext.getBytes("UTF-8"));
-            return Base64.getEncoder().encodeToString(result);
+            return new sun.misc.BASE64Encoder().encode(result).replaceAll("\r|\n|\r\n", "");
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -39,7 +38,7 @@
         try {
             SecretKey key = new SecretKeySpec("[key_placeholder]".getBytes(), "AES");
             AlgorithmParameterSpec iv = new IvParameterSpec("[iv_placeholder]".getBytes());
-            byte[] decodeBase64 = Base64.getDecoder().decode(encrypted);
+            byte[] decodeBase64 = new sun.misc.BASE64Decoder().decodeBuffer(encrypted);
             // 指定加密的算法、工作模式和填充方式
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
             cipher.init(Cipher.DECRYPT_MODE, key, iv);

