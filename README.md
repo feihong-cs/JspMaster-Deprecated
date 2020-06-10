@@ -51,7 +51,7 @@
   A：理论上，在Linux平台下借助python，在Windows平台下借助powershell，可以实现数据库管理功能，但是实现起来较耗时间，目前决定暂不支持数据库管理功能，后期如果JspMaster的使用者较多，可以考虑增加数据库管理功能。
 
 + Q:JspMaster只支持Jsp吗？  
-  A:是的，JspMaster目前只支持Jsp，但是提供了扩展功能。您可以将参考plugin目录中的CommandExecutor.java文件，为您的php/aspx/asp shell实现getName(显示在JspMaster中类型下拉选项框中的名称)和exec(您的shell执行命令时命令的格式，可参考已有的实现)方法，从而实现对php/aspx/asp shell的支持。  
+  A:是的，JspMaster目前只支持Jsp，但是提供了扩展功能。您可以将参考plugin目录中的CommandExecutor.java文件，为您的php/aspx/asp shell实现getName(显示在JspMaster中类型下拉选项框中的名称)和exec(您的shell执行命令时命令的格式，可参考已有的实现)方法，从而实现对php/aspx/asp shell的支持。  （新增了一个PHPDemo，演示对php的支持）
   
 # 特别鸣谢
 感谢 Pine.Lin 在此项目编写过程中给予的大量技术支持。
