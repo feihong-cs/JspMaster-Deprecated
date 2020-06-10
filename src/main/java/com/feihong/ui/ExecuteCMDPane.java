@@ -3,6 +3,7 @@ package com.feihong.ui;
 import com.feihong.executor.CommandExecutor;
 import com.feihong.executor.CommandExecutorFactory;
 import com.feihong.util.BasicSetting;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -14,10 +15,11 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 
-
 public class ExecuteCMDPane {
     private CommandExecutor executor;
     private boolean connected;
+    private Button button;
+    private TextField textField;
 
     public ExecuteCMDPane(){
         executor = CommandExecutorFactory.getInstance();
@@ -29,10 +31,10 @@ public class ExecuteCMDPane {
         bp.setPadding(new Insets(10, 10, 0, 10));
 
         BorderPane innerPane = new BorderPane();
-        TextField textField = new TextField();
+        textField = new TextField();
         textField.setPrefHeight(35);
 
-        Button button = new Button();
+        button = new Button();
         button.setAlignment(Pos.CENTER);
         button.setText("执行");
         button.setPrefWidth(100);
@@ -40,8 +42,10 @@ public class ExecuteCMDPane {
 
         if(connected){
             button.setDisable(false);
+            textField.setDisable(false);
         }else{
             button.setDisable(true);
+            textField.setDisable(true);
         }
 
         innerPane.setCenter(textField);
@@ -73,18 +77,33 @@ public class ExecuteCMDPane {
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                button.setDisable(true);
+                textField.setDisable(true);
+                textArea.setText("");
+
                 String command = textField.getText().trim();
                 if(!command.equals("")){
-                    String executeResult = executor.exec(command).getResponseResult();
-                    //这个或条件是为了解决执行在 Windows 下执行 ifconfig 时回显不正常的 bug
-                    //在 Windows 下通过 Runtime.getRuntime.exec() 执行，在本地得到的结果为
-                    //"java.io.IOException: Cannot run program "ifconfig": CreateProcess error=2, 系统找不到指定的文件。"
-                    //但是这个结果如果通过 response.getWriter.print 进行回显的时候，就会变成 "　　"
-                    if(executeResult.trim().equals("") || executeResult.trim().equalsIgnoreCase("　　")){
-                        textArea.setPromptText("执行完毕，未获取到执行结果，请确认命令输入是否正确");
-                    }else{
-                        textArea.setText(executeResult);
-                    }
+
+                    //必须得这样，不然不行，没效果
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            String executeResult = executor.exec(command).getResponseResult();
+                            //这个或条件是为了解决执行在 Windows 下执行 ifconfig 时回显不正常的 bug
+                            //在 Windows 下通过 Runtime.getRuntime.exec() 执行，在本地得到的结果为
+                            //"java.io.IOException: Cannot run program "ifconfig": CreateProcess error=2, 系统找不到指定的文件。"
+                            //但是这个结果如果通过 response.getWriter.print 进行回显的时候，就会变成 "　　"
+                            if(executeResult.trim().equals("") || executeResult.trim().equalsIgnoreCase("　　")){
+                                textArea.setPromptText("执行完毕，未获取到执行结果，请确认命令输入是否正确");
+                            }else{
+                                textArea.setText(executeResult);
+                            }
+
+                            button.setDisable(false);
+                            textField.setDisable(false);
+                        }
+                    }).start();
+
                 }
             }
         });

@@ -9,7 +9,7 @@ public class ClassLoaderCommandExecutor implements CommandExecutor {
 
     @Override
     public String getName() {
-        return "ClassLoader";
+        return "URLClassLoader";
     }
 
     @Override

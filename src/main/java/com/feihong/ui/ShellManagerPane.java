@@ -52,20 +52,20 @@ public class ShellManagerPane {
         urlColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(0.35));
 
         TableColumn shellTypeColumn = new TableColumn("Shell类型");
-        shellTypeColumn.setPrefWidth(180);
+        shellTypeColumn.setPrefWidth(170);
         shellTypeColumn.setCellValueFactory(
                 new PropertyValueFactory<ShellEntry, String>("type")
         );
 
         TableColumn createTimeColumn = new TableColumn("创建时间");
-        createTimeColumn.setMinWidth(140);
+        createTimeColumn.setMinWidth(170);
         createTimeColumn.setCellValueFactory(
                 new PropertyValueFactory<ShellEntry, String>("createTime")
         );
         createTimeColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(0.12));
 
         TableColumn updateTimeColumn = new TableColumn("最后访问时间");
-        updateTimeColumn.setMinWidth(140);
+        updateTimeColumn.setMinWidth(170);
         updateTimeColumn.setCellValueFactory(
                 new PropertyValueFactory<ShellEntry, String>("lastvisitTime")
         );
@@ -189,10 +189,21 @@ public class ShellManagerPane {
                                     entry.setLastvisitTime(time);
                                     try {
                                         DBUtil.save(entry);
+
                                     } catch (SQLException | ClassNotFoundException e) {
                                         e.printStackTrace();
                                     }
                                     stage.show();
+
+                                    //刷新最后访问日期
+                                    List<ShellEntry> list = null;
+                                    try {
+                                        list = DBUtil.queryAll();
+                                    } catch (Exception e) {
+                                        list = new ArrayList<>();
+                                    }
+
+                                    tableView.setItems(FXCollections.observableArrayList(list));
                                 }
                             });
                         }else if(openTask.getStatus() == -1){
