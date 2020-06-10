@@ -28,12 +28,17 @@
   java Server [ServerIP] [RMI监听端口] [HTTP监听端口]      
 ```
 &nbsp;&nbsp;&nbsp;并将JSP文件中的rmi地址修改为您VPS的IP地址  
+![rmi](https://raw.githubusercontent.com/feihong-cs/JspMaster/master/imgForReadme/rmi.png)
  + jndi.jsp
   使用时需要将tool文件夹中的jnid.zip上传至您的VPS并解压，在目录中执行   
 ```
   java Server [ServerIP] [RMI监听端口] [HTTP监听端口]      
 ```
-&nbsp;&nbsp;&nbsp;并将JSP文件中的rmi地址修改为您VPS的IP地址  
+&nbsp;&nbsp;&nbsp;并将JSP文件中的rmi地址修改为您VPS的IP地址
+![jndi](https://raw.githubusercontent.com/feihong-cs/JspMaster/master/imgForReadme/jndi.png)
+ + 界面截图
+ ![start](https://raw.githubusercontent.com/feihong-cs/JspMaster/master/imgForReadme/start.png)
+ ![filemanage](https://raw.githubusercontent.com/feihong-cs/JspMaster/master/imgForReadme/filemanage.png)
 
 # FAQ
 + Q:JspMaster流量是否加密？  
