@@ -96,7 +96,7 @@ public class BasicInfoPane {
         list.add(new BasicInfo("当前用户",user));
 
 
-        String dir = executor.exec("powershell -nop -ep bypass -c \"echo \\\"$PWD\\\"\"").getResponseResult();
+        String dir = executor.exec("chdir").getResponseResult();
         list.add(new BasicInfo("当前目录", dir));
 
 
@@ -132,7 +132,7 @@ public class BasicInfoPane {
 //        }
 
 
-        String path = executor.exec("powershell -nop -ep bypass -c \"echo $Env:PATH\"").getResponseResult();
+        String path = executor.exec("path").getResponseResult();
         list.add(new BasicInfo("环境变量PATH", this.myTrim(path)));
 
         return FXCollections.observableArrayList(list);
@@ -209,8 +209,14 @@ public class BasicInfoPane {
     }
 
     public String myTrim(String origin){
+
+        if(origin == null || origin.trim().equals("")){
+            return "";
+        }
+
         List<String> list;
         if(shellPlatform.equalsIgnoreCase("windows")){
+            origin = origin.substring(5);
             list = Arrays.asList(origin.split(";"));
         }else{
             list = Arrays.asList(origin.split(":"));
