@@ -25,15 +25,13 @@
 + rmi.jsp
   使用时需要将tool文件夹中的rmi.zip上传至您的VPS并解压，在目录中执行    
 ```
-  java Server [ServerIP] [RMI监听端口] [HTTP监听端口]   
-  python -m SimpleHTTPServer [HTTP监听端口]   
+  java Server [ServerIP] [RMI监听端口] [HTTP监听端口]      
 ```
 &nbsp;&nbsp;&nbsp;并将JSP文件中的rmi地址修改为您VPS的IP地址  
  + jndi.jsp
   使用时需要将tool文件夹中的jnid.zip上传至您的VPS并解压，在目录中执行   
 ```
-  java Server [ServerIP] [RMI监听端口] [HTTP监听端口]   
-  python -m SimpleHTTPServer [HTTP监听端口]   
+  java Server [ServerIP] [RMI监听端口] [HTTP监听端口]      
 ```
 &nbsp;&nbsp;&nbsp;并将JSP文件中的rmi地址修改为您VPS的IP地址  
 
